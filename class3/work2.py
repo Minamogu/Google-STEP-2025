@@ -20,7 +20,6 @@ def read_plus(line, index):
     token = {'type': 'PLUS'}
     return token, index + 1
 
-
 def read_minus(line, index):
     token = {'type': 'MINUS'}
     return token, index + 1
@@ -33,12 +32,19 @@ def read_divided(line, index):
     token = {'type': 'DIVIDED'}
     return token, index + 1 
 
+def read_leftp(line, index):
+    token = {'type': 'LEFTP'}
+    return token, index + 1
+
+def read_rightp(line, index):
+    token = {'type': 'RIGHTP'}
+    return token, index + 1
 
 def tokenize(line):
     tokens = []
     index = 0
     while index < len(line):
-        if line[index].isdigit():
+        if line[index].isdigit():  #こんなにif文をつらつら書くのは汚いような、、、
             (token, index) = read_number(line, index)
         elif line[index] == '+':
             (token, index) = read_plus(line, index)
@@ -47,7 +53,11 @@ def tokenize(line):
         elif line[index] == '*':
             (token, index) = read_times(line, index)
         elif line[index] == '/':
-            (token, index) = read_divided(line, index)            
+            (token, index) = read_divided(line, index) 
+        elif line[index] == '(':
+            (token, index) = read_leftp(line, index)
+        elif line[index] == ')':
+            (token, index) = read_rightp(line, index)
         else:
             print('Invalid character found: ' + line[index])
             exit(1)
@@ -55,10 +65,10 @@ def tokenize(line):
     return tokens
 
 def evaluate_timesdivided(tokens):
+    print(tokens)
     index = 0
     while index < len(tokens):
         if tokens[index]['type'] == 'TIMES':
-            # 
             if tokens[index - 1]['type'] == 'NUMBER':
                 times_number = tokens[index + 1]['number']
                 tokens.pop(index + 1)
@@ -98,8 +108,29 @@ def evaluate_plusminus(tokens):
         index += 1
     return answer
 
+def evaluate_p(tokens, left_index):
+    right_index = left_index + 1
+    while right_index < len(tokens):
+        if tokens[right_index]['type'] == 'LEFTP':
+            tokens = evaluate_p(tokens, right_index)
+        elif tokens[right_index]['type'] == 'RIGHTP':
+            inside_tokens = evaluate_timesdivided(tokens[left_index + 1 : right_index])
+            inside = evaluate_plusminus(inside_tokens)
+            tokens[left_index:right_index + 1] = [{'type': 'NUMBER', 'number': inside_tokens}] 
+        right_index += 1
+    
+    return tokens
+
+
 def evaluate(tokens):
-    while 
+    #(が見つかればかっこ内の式の処理に移る
+    index = 0
+    while index < len(tokens):
+        if tokens[index]['type'] == 'LEFTP':
+            tokens = evaluate_p(tokens, index)
+        index += 1
+    print(tokens)
+
     tokens = evaluate_timesdivided(tokens)
     
     if len(tokens) == 1:  # 積と商のみの計算だった場合
@@ -125,7 +156,8 @@ def run_test():
     test("1.0+2.1-3")
     test("10/2")
     test("0*2")
-    test("0/0")
+    test("(3+2*7)*10")
+    test("2+(3+2))")
     test("")
     test("aaa+2")
     print("==== Test finished! ====\n")
