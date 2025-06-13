@@ -116,7 +116,7 @@ def evaluate_p(tokens, left_index):
         elif tokens[right_index]['type'] == 'RIGHTP':
             inside_tokens = evaluate_timesdivided(tokens[left_index + 1 : right_index])
             inside = evaluate_plusminus(inside_tokens)
-            tokens[left_index:right_index + 1] = [{'type': 'NUMBER', 'number': inside_tokens}] 
+            tokens[left_index:right_index + 1] = [{'type': 'NUMBER', 'number': inside}] 
         right_index += 1
     
     return tokens
