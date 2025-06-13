@@ -44,7 +44,7 @@ def tokenize(line):
     tokens = []
     index = 0
     while index < len(line):
-        if line[index].isdigit():  #こんなにif文をつらつら書くのは汚いような、、、
+        if line[index].isdigit():  
             (token, index) = read_number(line, index)
         elif line[index] == '+':
             (token, index) = read_plus(line, index)
@@ -65,7 +65,6 @@ def tokenize(line):
     return tokens
 
 def evaluate_timesdivided(tokens):
-    print(tokens)
     index = 0
     while index < len(tokens):
         if tokens[index]['type'] == 'TIMES':
@@ -129,8 +128,8 @@ def evaluate(tokens):
         if tokens[index]['type'] == 'LEFTP':
             tokens = evaluate_p(tokens, index)
         index += 1
-    print(tokens)
 
+    # 掛け算割り算の処理
     tokens = evaluate_timesdivided(tokens)
     
     if len(tokens) == 1:  # 積と商のみの計算だった場合
