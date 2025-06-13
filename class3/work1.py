@@ -58,7 +58,6 @@ def evaluate_timesdivided(tokens):
     index = 0
     while index < len(tokens):
         if tokens[index]['type'] == 'TIMES':
-            # 
             if tokens[index - 1]['type'] == 'NUMBER':
                 times_number = tokens[index + 1]['number']
                 tokens.pop(index + 1)
