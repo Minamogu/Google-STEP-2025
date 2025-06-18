@@ -128,9 +128,7 @@ class Wikipedia:
 
     # Homework #2: Calculate the page ranks and print the most popular pages.
     def find_most_popular_pages(self):
-        #------------------------#
-        # Write your code here!  #
-        #------------------------#
+
         pass
 
 
