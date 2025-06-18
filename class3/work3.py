@@ -66,6 +66,7 @@ def tokenize(line):
 
 def evaluate_timesdivided(tokens):
     index = 0
+    new_tokens = []
     while index < len(tokens):
         if tokens[index]['type'] == 'TIMES':
             if tokens[index - 1]['type'] == 'NUMBER':
@@ -88,6 +89,8 @@ def evaluate_timesdivided(tokens):
             else:
                 print('Invalid syntax')   
                 exit(1)
+        else:
+            
         index += 1
     return tokens
 
