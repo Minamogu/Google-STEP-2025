@@ -110,10 +110,10 @@ class Wikipedia:
                 ans = []
                 current = node
                 while current:  #ゴールが見つかったら経路をたどって返す
-                    ans.append(current)
+                    ans.append(self.titles[current])
                     current = path[current]
                 print('Shortest path is')
-                [print(self.titles[i]) for i in ans[::-1]]
+                print(' -> '.join(ans[::-1]))
                 return
             for child in self.links[node]:
                 if child not in visited:
@@ -129,8 +129,31 @@ class Wikipedia:
 
     # Homework #2: Calculate the page ranks and print the most popular pages.
     def find_most_popular_pages(self):
+        total_rank = len(self.titles)
+        old_pagerank = {key: 1 for key in self.titles.keys()}
 
-        pass
+
+        while   #収束条件どうしよう
+        total_excess = 0
+        new_pagerank = {key: 0 for key in self.titles.keys()}
+        for key in self.titles.keys():  
+            if self.links.get(key):  #ノードにつながるリンクがあるなら85%を分配し、15%を全体に分配
+                divided_rank = old_pagerank[key] * 0.85 / len(self.links[key])
+                for value in self.links[key]:
+                    new_pagerank[value] += divided_rank
+                total_excess += 0.15 * old_pagerank[key]
+            else:  #ノードにつながるリンクがなければ100%全体に分配
+                total_excess += old_pagerank[key]
+        
+        divided_total_excess = total_excess / total_rank  #全体にページランクを分配
+        for key in new_pagerank.keys():
+            new_pagerank[key] += divided_total_excess
+
+        old_pagerank = new_pagerank  #ページランクの更新
+        
+
+        
+
 
 
     # Homework #3 (optional):
@@ -172,9 +195,10 @@ if __name__ == "__main__":
     # # Example
     # wikipedia.find_most_linked_pages()
     # # Homework #1
-    wikipedia.find_shortest_path("渋谷", "小野妹子")
-    
+    # wikipedia.find_shortest_path("渋谷", "小野妹子")
     # # Homework #2
-    # wikipedia.find_most_popular_pages()
+    wikipedia.find_most_popular_pages()
     # # Homework #3 (optional)
     # wikipedia.find_longest_path("渋谷", "池袋")
+
+    # wikipedia.show()
