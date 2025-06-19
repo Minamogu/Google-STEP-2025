@@ -39,6 +39,7 @@ class Wikipedia:
 
     
     def show(self):
+        """titlesとlinksの中身を表示"""
         i = 0
         for key in self.titles.keys():
             print(key, self.titles[key])
@@ -112,7 +113,7 @@ class Wikipedia:
                     ans.append(current)
                     current = path[current]
                 print('Shortest path is')
-                [print(i) for i in ans[::-1]]
+                [print(self.titles[i]) for i in ans[::-1]]
                 return
             for child in self.links[node]:
                 if child not in visited:
@@ -171,7 +172,7 @@ if __name__ == "__main__":
     # # Example
     # wikipedia.find_most_linked_pages()
     # # Homework #1
-    wikipedia.find_shortest_path("A", "D")
+    wikipedia.find_shortest_path("渋谷", "小野妹子")
     
     # # Homework #2
     # wikipedia.find_most_popular_pages()
