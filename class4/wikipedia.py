@@ -154,8 +154,6 @@ class Wikipedia:
             old_pagerank = new_pagerank  #ページランクの更新
             [print(i) for i in top10]
 
-        #test
-
 
 
     # Homework #3 (optional):
