@@ -1,5 +1,6 @@
 import sys
 import collections
+from sklearn.metrics import root_mean_squared_error
 
 class Wikipedia:
 
@@ -115,7 +116,7 @@ class Wikipedia:
                 print('Shortest path is')
                 print(' -> '.join(ans[::-1]))
                 return
-            for child in self.links[node]:
+            for child in self.links[node]:  #
                 if child not in visited:
                     queue.append(child)
                     visited.add(child)
@@ -131,26 +132,27 @@ class Wikipedia:
     def find_most_popular_pages(self):
         total_rank = len(self.titles)
         old_pagerank = {key: 1 for key in self.titles.keys()}
+        iteration = 0
 
-
-        while   #収束条件どうしよう
-        total_excess = 0
-        new_pagerank = {key: 0 for key in self.titles.keys()}
-        for key in self.titles.keys():  
-            if self.links.get(key):  #ノードにつながるリンクがあるなら85%を分配し、15%を全体に分配
-                divided_rank = old_pagerank[key] * 0.85 / len(self.links[key])
-                for value in self.links[key]:
-                    new_pagerank[value] += divided_rank
-                total_excess += 0.15 * old_pagerank[key]
-            else:  #ノードにつながるリンクがなければ100%全体に分配
-                total_excess += old_pagerank[key]
-        
-        divided_total_excess = total_excess / total_rank  #全体にページランクを分配
-        for key in new_pagerank.keys():
-            new_pagerank[key] += divided_total_excess
-
-        old_pagerank = new_pagerank  #ページランクの更新
-        
+        while True: 
+            total_excess = 0
+            new_pagerank = {key: 0 for key in self.titles.keys()}
+            for key in self.titles.keys():  
+                if self.links.get(key):  #ノードにつながるリンクがあるなら85%を分配し、15%を全体に分配
+                    divided_rank = old_pagerank[key] * 0.85 / len(self.links[key])
+                    for value in self.links[key]:
+                        new_pagerank[value] += divided_rank
+                    total_excess += 0.15 * old_pagerank[key]
+                else:  #ノードにつながるリンクがなければ100%全体に分配
+                    total_excess += old_pagerank[key]
+            
+            divided_total_excess = total_excess / total_rank  #全体にページランクを分配
+            for key in new_pagerank.keys():
+                new_pagerank[key] += divided_total_excess
+            top10 = sorted(new_pagerank.items(), key=lambda x:x[:9], reverse=True)
+            mse = root_mean_squared_error(top10, [old_pagerank[i] for i in top10])  #平均二乗誤差
+            old_pagerank = new_pagerank  #ページランクの更新
+            [print(i) for i in top10]
 
         
 
